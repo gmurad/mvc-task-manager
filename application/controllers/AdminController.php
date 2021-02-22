@@ -12,7 +12,9 @@ class AdminController extends  MainController{
 			exit;
 		}
 
-		$this->tasks = $this->model->getTasks($this->pageNum);
+		$sort = isset($_GET['sort']) ? $_GET['sort'] : 'user_name';
+		$this->tasks = $this->model->getTasks($this->pageNum, $sort);
+		
 		$task = isset($_GET['id_edit']) ? $this->model->getTask($_GET['id_edit']) : [];
 		
 		$pageTitle = isset($this->model->pageTitle) ? $this->model->pageTitle : '';
@@ -25,8 +27,8 @@ class AdminController extends  MainController{
 			$task = $_POST['task'];
 			$checked = ($_POST['checked'] == 'on') ? 1 : 0;
 			$task_id = $_POST['task_id'];
-			$sql = "UPDATE tasks SET task = '$task', checked = '$checked' WHERE id = $task_id";
-			$this->model->db->doQuery($sql);
+			$sql = "UPDATE tasks SET task = :task, checked = :checked WHERE id = :id";
+			$this->model->db->doQuery($sql, ['task'=> $task, 'checked' => $checked, 'id'=> $task_id]);
 
 			header("Location: {$_SERVER['HTTP_REFERER']}");
 		}

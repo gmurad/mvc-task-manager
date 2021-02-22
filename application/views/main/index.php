@@ -10,15 +10,21 @@ $taskGrid = '<table class="table table-striped">
       <th scope="col"><a href="?sort=user_name" class="btn btn-secondary">User Name</a></th>
       <th scope="col"><a href="?sort=email" class="btn btn-secondary">Email</a></th>
       <th scope="col"><a href="#" class="btn btn-secondary">Task</a></th>
+      <th scope="col"><a href="?sort=checked" class="btn btn-secondary">Checked</a></th>
     </tr>
   </thead>
   <tbody>';
 
 foreach ($tasks as $taskRow) {
-
-	   $taskGrid .= '<tr> <td>'.$taskRow['user_name'].'</td> <td>'.$taskRow['email'].'</td> <td>'.$taskRow['task'].'</td> </tr>';
-
+   $checked = $taskRow['checked'] ? "checked" : "";
+   $taskGrid .= '<tr> 
+      <td>'.$taskRow['user_name'].'</td> 
+      <td>'.$taskRow['email'].'</td> 
+      <td>'.$taskRow['task'].'</td> 
+      <td> <input class="form-check-input m-0" type="checkbox" disabled '. $checked .'></td>
+     </tr>';
 }
+
 $taskGrid .= '</tbody></table>';
 
 echo "$taskGrid";

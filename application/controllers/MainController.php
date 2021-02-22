@@ -22,7 +22,8 @@ class MainController extends  Controller{
 	}
 
 	public function indexAction(){
-		$this->tasks = $this->model->getTasks($this->pageNum);
+		$sort = isset($_GET['sort']) ? $_GET['sort'] : 'user_name';
+		$this->tasks = $this->model->getTasks($this->pageNum, $sort);
 		$this->view->render('Task manager', $this->tasks, $this->paginator);
 	}
 
@@ -32,8 +33,8 @@ class MainController extends  Controller{
 			$userName = $_POST['user_name'];
 			$email = $_POST['email'];
 			$task = $_POST['task'];
-			$sql = "INSERT INTO tasks (user_name, email, task) VALUES ('$userName', '$email', '$task')";
-			$this->model->db->doQuery($sql);
+			$sql = "INSERT INTO tasks (user_name, email, task) VALUES (?, ?, ?)";
+			$this->model->db->doQuery($sql, [$userName, $email, $task]);
 
 			header("Location: {$_SERVER['HTTP_REFERER']}");
 		}
